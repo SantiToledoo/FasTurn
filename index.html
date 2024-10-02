@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FasTurn - Sistema de Citas Médicas</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="container">
+                <a href="#" class="logo">FasTurn</a>
+                <ul>
+                    <li><a href="#" class="active">Inicio</a></li>
+                    <li><a href="#solicitar-turno">Solicitar Turno</a></li>
+                    <li id="iniciarSesionNav"><a href="#iniciar-sesion" class="btn btn-login">Iniciar Sesión</a></li>
+                    <li id="cerrarSesionNav" style="display: none;"><button id="cerrarSesion" class="btn btn-logout">Cerrar Sesión</button></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section id="inicio" class="hero">
+            <div class="container">
+                <h1>Bienvenido a FasTurn</h1>
+                <p>Reserva tus citas médicas con facilidad, en cualquier momento y lugar.</p>
+                <a href="#solicitar-turno" class="btn">Solicitar Turno</a>
+            </div>
+        </section>
+
+        <section id="solicitar-turno" class="solicitar-turno">
+            <div class="container">
+                <h2>Solicitar Turno</h2>
+                <div id="datosUsuario" style="display: none;">
+                    <p>Paciente: <span id="nombreUsuario"></span>, DNI: <span id="dniUsuario"></span></p>
+                    <button id="modificarDatos" class="btn">Modificar datos</button>
+                </div>
+                <form id="formularioSolicitudTurno">
+                    <div id="camposDatosPersonales">
+                        <div class="form-group">
+                            <label for="nombre">Nombre</label>
+                            <input type="text" id="nombre" name="nombre" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="dni">DNI</label>
+                            <input type="text" id="dni" name="dni" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="telefono">Teléfono</label>
+                            <input type="tel" id="telefono" name="telefono" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Correo Electrónico</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="especialidad">Especialidad</label>
+                        <select id="especialidad" name="especialidad" required>
+                            <option value="">Seleccione una especialidad</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="medico">Médico</label>
+                        <select id="medico" name="medico" required>
+                            <option value="">Seleccione un médico</option>
+                        </select>
+                    </div>
+                    <div id="calendario-container">
+                        <h3>Seleccione una fecha y hora</h3>
+                        <div class="calendario-header">
+                        </div>
+                        <div id="calendario-carrusel">
+                            <!-- El calendario se generará dinámicamente aquí -->
+                        </div>
+                        <button type="button" id="verMas" class="btn-link">ver más</button>
+                    </div>
+                    <div class="form-group">
+                        <label for="fecha">Fecha seleccionada</label>
+                        <input type="date" id="fecha" name="fecha" required readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="hora">Hora seleccionada</label>
+                        <input type="time" id="hora" name="hora" required readonly>
+                    </div>
+                    <button type="submit" class="btn">Solicitar Turno</button>
+                </form>
+            </div>
+        </section>
+
+        <section id="iniciar-sesion" class="iniciar-sesion">
+            <div class="container">
+                <h2>Iniciar Sesión</h2>
+                <form id="formularioInicioSesion">
+                    <div class="form-group">
+                        <label for="emailLogin">Correo Electrónico</label>
+                        <input type="email" id="emailLogin" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Contraseña</label>
+                        <input type="password" id="password" name="password" required>
+                    </div>
+                    <button type="submit" class="btn">Iniciar Sesión</button>
+                </form>
+            </div>
+        </section>
+
+        <section id="dashboard" class="dashboard" style="display: none;">
+            <div class="container">
+                <h2>Dashboard</h2>
+                <div id="rolUsuario"></div>
+                <div id="filtrosTurnos" style="display: none;">
+                    <input type="text" id="filtroNombre" placeholder="Filtrar por nombre">
+                    <input type="text" id="filtroDNI" placeholder="Filtrar por DNI">
+                    <input type="date" id="filtroFechaInicio" placeholder="Fecha inicio">
+                    <input type="date" id="filtroFechaFin" placeholder="Fecha fin">
+                    <button id="aplicarFiltros" class="btn">Aplicar Filtros</button>
+                </div>
+                <div id="configuracionHorarios" style="display: none;">
+                    <h3>Configuración de Horarios</h3>
+                    <div class="form-group">
+                        <label for="horaInicio">Hora de inicio:</label>
+                        <input type="time" id="horaInicio" name="horaInicio">
+                    </div>
+                    <div class="form-group">
+                        <label for="horaFin">Hora de fin:</label>
+                        <input type="time" id="horaFin" name="horaFin">
+                    </div>
+                    <button id="guardarHorarios" class="btn">Guardar Horarios</button>
+                </div>
+                <div id="crearUsuario" style="display: none;">
+                    <h3>Crear Nuevo Usuario</h3>
+                    <form id="formularioCrearUsuario">
+                        <div class="form-group">
+                            <label for="nuevoNombre">Nombre:</label>
+                            <input type="text" id="nuevoNombre" name="nuevoNombre" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="nuevoDNI">DNI:</label>
+                            <input type="text" id="nuevoDNI" name="nuevoDNI" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="nuevoEmail">Email:</label>
+                            <input type="email" id="nuevoEmail" name="nuevoEmail" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="nuevoPassword">Contraseña:</label>
+                            <input type="password" id="nuevoPassword" name="nuevoPassword" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="nuevoRol">Rol:</label>
+                            <select id="nuevoRol" name="nuevoRol" required>
+                                <option value="paciente">Paciente</option>
+                                <option value="medico">Médico</option>
+                                <option value="secretaria">Secretaria</option>
+                            </select>
+                        </div>
+                        <div class="form-group" id="especialidadMedico" style="display: none;">
+                            <label for="nuevaEspecialidad">Especialidad:</label>
+                            <input type="text" id="nuevaEspecialidad" name="nuevaEspecialidad">
+                        </div>
+                        <button type="submit" class="btn">Crear Usuario</button>
+                    </form>
+                </div>
+                <table id="tablaTurnos">
+                    <thead>
+                        <tr>
+                            <th>Paciente</th>
+                            <th>DNI</th>
+                            <th>Fecha</th>
+                            <th>Hora</th>
+                            <th>Especialidad</th>
+                            <th>Médico</th>
+                            <th>Estado</th>
+                            <th>Motivo</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Los turnos se agregarán dinámicamente aquí -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2023 FasTurn. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <div id="popup" class="popup">
+        <div class="popup-content">
+            <h3 id="popup-title"></h3>
+            <p id="popup-message"></p>
+            <textarea id="motivoRechazo" placeholder="Motivo del rechazo" style="display: none;"></textarea>
+            <button id="popup-close" class="btn">Cerrar</button>
+            <button id="popup-confirm" class="btn" style="display: none;">Confirmar</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
